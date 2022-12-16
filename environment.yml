@@ -1,0 +1,11 @@
+name: convert2xyz
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+
+  - pysimplegui
+  - rich
+  # - ase
+
+  - pyinstaller
