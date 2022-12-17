@@ -8,4 +8,7 @@ dependencies:
   - rich
   # - ase
 
+  - plotly
+  # - numpy
+
   - pyinstaller

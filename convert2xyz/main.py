@@ -85,6 +85,16 @@ def dict2xyz(data:dict) -> str:
 #     ase_view(atoms)
 
 
+def view_as_graph(xyz):
+    from xyz2graph import MolGraph, to_plotly_figure
+    from plotly.offline import offline
+
+    mg = MolGraph()
+    mg.read_xyz_from_str(xyz)
+    fig = to_plotly_figure(mg)
+    offline.plot(fig)
+
+
 def main():
     make_dpi_aware()
     window = sg.Window('C2XYZ', layout, resizable=True, finalize=True)
@@ -151,14 +161,21 @@ def main():
                 with open(xyz_file, 'w') as f:
                     f.write(app['xyz'])
 
-            if event == 'view_ase':
-                lammps = values['lammps']
-                app['data'] = parse_lammps_dump(lammps, app['atoms_dict'], values['units_A'])
+            # if event == 'view_ase':
+            #     lammps = values['lammps']
+            #     app['data'] = parse_lammps_dump(lammps, app['atoms_dict'], values['units_A'])
 
+            #     try:
+            #         view_with_ase(app['data'])
+            #     except ImportError:
+            #         window['xyz'].update('ASE not included:( Use VESTA!')
+
+            if event == 'view_graph':
                 try:
-                    view_with_ase(app['data'])
+                    view_as_graph(values['xyz'])
                 except ImportError:
-                    window['xyz'].update('ASE not included:( Use VESTA!')
+                    window['xyz'].update('Error occurred:( Use VESTA with xyz file!')
+
 
     except Exception as e:
         sg.popup_error_with_traceback(f'An error happened.  Here is the info:', traceback.format_exc())
